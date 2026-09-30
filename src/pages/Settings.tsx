@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { BankSyncCard } from '../components/BankSync'
 import { IconBell, IconLock, IconLogout, IconMoon, IconPlus, IconSun } from '../components/Icons'
 import { useToast } from '../components/Toast'
 import { useData } from '../hooks/useData'
@@ -24,6 +25,7 @@ export function SettingsPage({ email }: { email: string }) {
           <AppearanceCard />
         </div>
         <div className="stack">
+          <BankSyncCard />
           <CategoriesCard />
           <PaymentsCard />
           <TagsCard />

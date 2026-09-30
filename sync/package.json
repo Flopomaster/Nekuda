@@ -1,0 +1,16 @@
+{
+  "name": "nekuda-sync",
+  "private": true,
+  "type": "module",
+  "description": "Nightly bank sync worker for Nekuda (runs in GitHub Actions)",
+  "scripts": {
+    "sync": "tsx index.ts"
+  },
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "dependencies": {
+    "israeli-bank-scrapers": "^6.12.2",
+    "tsx": "^4.23.15"
+  }
+}
