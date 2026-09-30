@@ -413,6 +413,35 @@ table.data td.n { text-align: end; }
 .insight b { font-weight: 600; }
 .insight p { margin: 3px 0 0; font-size: 14px; color: var(--text-2); line-height: 1.5; }
 
+/* ============ Bank import ============ */
+.sheet.wide { width: min(820px, 100%); }
+.import-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 600px) {
+  .import-stats { gap: 6px; }
+  .import-stats .card { padding: 10px !important; }
+  .import-stats .v { font-size: 16px !important; }
+  .import-stats .d { display: none; }
+}
+.dropzone {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 34px 16px; border: 2px dashed var(--border-strong);
+  border-radius: 20px; background: var(--surface-2); cursor: pointer; text-align: center; transition: border-color .15s;
+}
+.dropzone:hover { border-color: var(--primary); }
+.dropzone input { display: none; }
+.import-row { display: grid; grid-template-columns: 20px minmax(0, 1fr) 170px 96px; align-items: center; gap: 10px; padding: 9px 2px; border-bottom: 1px solid var(--border); }
+.import-row input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--primary); }
+.import-row .nm { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.import-row .select { padding: 7px 9px; font-size: 13px; }
+.import-row .amt { text-align: end; font-size: 14px; }
+.import-footer { position: sticky; bottom: calc(-22px - var(--safe-bottom)); background: var(--surface); padding: 12px 0 4px; margin-bottom: -4px; }
+@media (max-width: 600px) {
+  .import-row { grid-template-columns: 20px minmax(0, 1fr) 88px; grid-template-areas: "c n a" ". s s"; }
+  .import-row input[type=checkbox] { grid-area: c; }
+  .import-row .grow { grid-area: n; }
+  .import-row .select { grid-area: s; }
+  .import-row .amt { grid-area: a; }
+}
+
 /* ============ Report (export) ============ */
 .report {
   /* Reports are always rendered in light mode, whatever the app theme */

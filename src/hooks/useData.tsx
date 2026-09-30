@@ -19,6 +19,7 @@ type Data = {
   reload: () => Promise<void>
   saveTransaction: (t: Partial<Transaction>) => Promise<boolean>
   deleteTransaction: (id: string) => Promise<void>
+  importTransactions: (rows: Partial<Transaction>[]) => Promise<number | null>
   saveTask: (t: Partial<Task>) => Promise<boolean>
   deleteTask: (id: string) => Promise<void>
   setDone: (task: Task, date: string, done: boolean) => Promise<void>
@@ -97,6 +98,19 @@ export function DataProvider({ children }: { children: ReactNode }) {
     if (error) return fail(error)
     setTransactions((prev) => prev.filter((x) => x.id !== id))
   }, [fail])
+
+  /** Bulk insert from a bank file; rows already imported (same external_id) are skipped. */
+  const importTransactions = useCallback(async (rows: Partial<Transaction>[]) => {
+    let added = 0
+    for (let i = 0; i < rows.length; i += 200) {
+      const { data, error } = await supabase.from('transactions')
+        .upsert(rows.slice(i, i + 200), { onConflict: 'user_id,external_id', ignoreDuplicates: true }).select('id')
+      if (error) { fail(error); await reload(); return null }
+      added += data?.length ?? 0
+    }
+    await reload()
+    return added
+  }, [fail, reload])
 
   const saveTask = useCallback(async (t: Partial<Task>) => {
     const { data, error } = await supabase.from('tasks').upsert(t).select().single()
@@ -177,9 +191,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
     categoryById: new Map(categories.map((c) => [c.id, c])),
     paymentById: new Map(paymentMethods.map((p) => [p.id, p])),
     tagById: new Map(tags.map((t) => [t.id, t])),
-    reload, saveTransaction, deleteTransaction, saveTask, deleteTask, setDone, toggleSubtask, saveSettings, saveRow,
+    reload, saveTransaction, deleteTransaction, importTransactions, saveTask, deleteTask, setDone, toggleSubtask, saveSettings, saveRow,
   }), [loading, settings, categories, paymentMethods, tags, transactions, tasks, completions,
-    reload, saveTransaction, deleteTransaction, saveTask, deleteTask, setDone, toggleSubtask, saveSettings, saveRow])
+    reload, saveTransaction, deleteTransaction, importTransactions, saveTask, deleteTask, setDone, toggleSubtask, saveSettings, saveRow])
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
