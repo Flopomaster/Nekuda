@@ -17,7 +17,7 @@ export function Login() {
       if (error) setMsg({ text: error.message.includes('confirm') ? 'צריך לאשר את כתובת המייל (בדוק את תיבת הדואר)' : 'אימייל או סיסמה שגויים', error: true })
     } else {
       const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: location.origin } })
-      if (error) setMsg({ text: error.message.includes('Database error') ? 'ההרשמה סגורה: לאפליקציה כבר יש משתמש' : error.message, error: true })
+      if (error) setMsg({ text: error.message.includes('Database error') ? 'ההרשמה סגורה: הגעתם למספר המשתמשים המרבי' : error.message, error: true })
       else if (!data.session) setMsg({ text: 'נשלח אליך מייל אימות. אחרי האישור אפשר להתחבר.' })
     }
     setBusy(false)

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useSearchParams } from 'react-router-dom'
 import { Donut, IncomeExpenseBars, Legend } from '../components/Charts'
 import { IconDownload, IconSearch, IconTable, IconChart } from '../components/Icons'
+import { ImportSheet } from '../components/ImportSheet'
 import { useToast } from '../components/Toast'
 import { TransactionForm } from '../components/TransactionForm'
 import { useData } from '../hooks/useData'
@@ -29,6 +30,7 @@ export function Finance() {
   const [preset, setPreset] = useState<PresetId>('month')
   const [period, setPeriod] = useState<Period>(presetPeriod('month'))
   const { loading, transactions } = useData()
+  const [importing, setImporting] = useState(false)
   const txs = useMemo(() => transactions.filter((t) => inPeriod(t, period)), [transactions, period])
 
   const choosePreset = (id: PresetId) => {
@@ -45,7 +47,9 @@ export function Finance() {
           <h1>כספים</h1>
           <div className="sub">{periodLabel(period)}</div>
         </div>
+        <button className="btn outline" onClick={() => setImporting(true)}><IconDownload style={{ transform: 'rotate(180deg)' }} />ייבוא מהבנק</button>
       </div>
+      {importing && <ImportSheet onClose={() => setImporting(false)} />}
 
       <div className="card" style={{ padding: 14, marginBottom: 16 }}>
         <div className="row wrap" style={{ gap: 12 }}>

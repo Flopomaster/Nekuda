@@ -20,6 +20,7 @@ export type Transaction = {
   merchant: string | null
   payment_method_id: string | null
   note: string | null
+  external_id?: string | null
   created_at: string
 }
 
